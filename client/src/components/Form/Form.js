@@ -1,7 +1,9 @@
 import React from 'react';
+import useStyles from './styles.js';
 
 const Form = () => {
-    return(
+    const classes = useStyles();
+    return (
         <h1>Form</h1>
     );
 }
