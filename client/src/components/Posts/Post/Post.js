@@ -28,16 +28,16 @@ const Post = ({ post, setCurrentId }) => {
             </div>
             <Typography className={classes.title} variant="h5" gutterBottom>{post.title}</Typography>
             <CardContent>
-                <Typography variant="h5" gutterBottom>{post.message}</Typography>
+                <Typography variant="body2" color={"textSecondary"} component="p">{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
                 <Button color="primary" size="small" onClick={() => dispatch(likePost(post._id))}>
-                    <ThumbUpAltIcon fontSize="small" />
-                    Like
+                    <ThumbUpAltIcon fontSize="small" /> &nbsp;
+                    Like &nbsp;
                     {post.likeCount}
                 </Button>
-                <Button color="primary" size="small" onClick={() => dispatch(deletePost(post._id))}>
-                    <DeleteIcon fontSize="small" />
+                <Button style={{ color: "red" }} size="small" onClick={() => dispatch(deletePost(post._id))}>
+                    <DeleteIcon fontSize="small" /> &nbsp;
                     Delete
                 </Button>
             </CardActions>
