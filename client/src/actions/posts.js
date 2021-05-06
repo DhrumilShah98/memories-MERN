@@ -1,10 +1,11 @@
+import { FETCH_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST, LIKE_POST } from '../constants/actionTypes';
 import * as api from '../api';
 
 // Action Creators
 export const getPosts = () => async (dispatch) => {
     try {
         const { data } = await api.fetchPosts();
-        dispatch({ type: 'FETCH_POSTS', payload: data });
+        dispatch({ type: FETCH_POSTS, payload: data });
     } catch (error) {
         console.log(error);
     }
@@ -13,7 +14,7 @@ export const getPosts = () => async (dispatch) => {
 export const createPost = (post) => async (dispatch) => {
     try {
         const { data } = await api.createPost(post);
-        dispatch({ type: 'CREATE_POST', payload: data });
+        dispatch({ type: CREATE_POST, payload: data });
     } catch (error) {
         console.log(error);
     }
@@ -22,7 +23,7 @@ export const createPost = (post) => async (dispatch) => {
 export const updatePost = (currentId, post) => async (dispatch) => {
     try {
         const { data } = await api.updatePost(currentId, post);
-        dispatch({ type: 'UPDATE_POST', payload: data });
+        dispatch({ type: UPDATE_POST, payload: data });
     } catch (error) {
         console.log(error);
     }
@@ -31,7 +32,7 @@ export const updatePost = (currentId, post) => async (dispatch) => {
 export const deletePost = (currentId) => async (dispatch) => {
     try {
         await api.deletePost(currentId);
-        dispatch({ type: 'DELETE_POST', payload: currentId });
+        dispatch({ type: DELETE_POST, payload: currentId });
     } catch (error) {
         console.log(error);
     }
@@ -40,7 +41,7 @@ export const deletePost = (currentId) => async (dispatch) => {
 export const likePost = (currentId) => async (dispatch) => {
     try {
         const { data } = await api.likePost(currentId);
-        dispatch({ type: 'LIKE_POST', payload: data });
+        dispatch({ type: LIKE_POST, payload: data });
     } catch (error) {
         console.log(error);
     }
