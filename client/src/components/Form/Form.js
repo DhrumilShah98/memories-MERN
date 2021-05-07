@@ -14,7 +14,7 @@ const Form = ({ currentId, setCurrentId }) => {
         selectedFile: ''
     });
 
-    const postToUpdate = useSelector((state) => currentId ? state.posts.find((p) => p._id == currentId) : null);
+    const postToUpdate = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
 
     const classes = useStyles();
 
