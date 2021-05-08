@@ -18,9 +18,7 @@ export const signin = async (req, res) => {
             return res.status(404).json({ message: "Invalid credentials." });
         }
 
-        const token = jwt.sign({ email: existingUser.email, id: existingUser._id },
-            process.env.JWT_PRIVATE_KEY,
-            { expiresIn: "1h" });
+        const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         return res.status(200).json({ result: existingUser, token: token });
     } catch (error) {
@@ -41,7 +39,7 @@ export const signup = async (req, res) => {
             return res.status(400).json({ message: "Password don't match." });
         }
 
-        const hashedPassword = bcrypt.hash(password, 12);
+        const hashedPassword = await bcrypt.hash(password, 12);
 
         const result = await User.create({
             name: `${firstName} ${lastName}`,
@@ -49,11 +47,9 @@ export const signup = async (req, res) => {
             password: hashedPassword
         });
 
-        const token = jwt.sign({ email: existingUser.email, id: existingUser._id },
-            process.env.JWT_PRIVATE_KEY,
-            { expiresIn: "1h" });
+        const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        return res.status(200).json({ result: result, token: token });
+        return res.status(201).json({ result: result, token: token });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
