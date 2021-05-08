@@ -25,7 +25,7 @@ export const updatePost = async (req, res) => {
     const { id: _id } = req.params;
     const post = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send(`No post with id: ${_id}`);
 
     try {
         const updatedPost = await PostMessage.findByIdAndUpdate(_id, { ...post, _id }, { new: true });
@@ -38,7 +38,7 @@ export const updatePost = async (req, res) => {
 export const deletePost = async (req, res) => {
     const { id: _id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send(`No post with id: ${_id}`);
 
     try {
         await PostMessage.findByIdAndRemove(_id);
@@ -51,11 +51,23 @@ export const deletePost = async (req, res) => {
 export const likePost = async (req, res) => {
     const { id: _id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if (!req.userId) res.send(401).json({ message: 'Unauthorized' });
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send(`No post with id: ${_id}`);
 
     try {
-        const updateLikeCount = { $inc: { likeCount: 1 } };
-        const updatedPost = await PostMessage.findByIdAndUpdate(_id, updateLikeCount, { new: true });
+        const post = await PostMessage.findById(_id);
+        const index = post.likes.findIndex((userId) => userId === String(req.userId));
+
+        if (index === -1) {
+            // Like the post
+            post.likes.push(req.userId);
+        } else {
+            // Dislike the post
+            post.likes = post.likes.filter((userId) => userId !== String(req.userId));
+        }
+
+        const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true });
         res.status(200).json(updatedPost);
     } catch (error) {
         res.status(500).json({ message: error.message });
