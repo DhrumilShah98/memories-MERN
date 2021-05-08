@@ -8,20 +8,31 @@ import Icon from './icon';
 import useStyles from './styles';
 import Input from './Input';
 import { AUTH } from '../../constants/actionTypes';
+import { signin, signup } from '../../actions/auth';
+
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const Auth = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const [formData, setFormData] = useState(initialState);
     const [showPassword, setShowPassword] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
 
+        if (isSignUp) {
+            dispatch(signup(formData, history));
+        } else {
+            dispatch(signin(formData, history));
+        }
     };
 
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleShowPassword = () => {
